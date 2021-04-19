@@ -1,0 +1,11 @@
+{
+  "appId": "pathfinding-visualizer",
+  "files": [
+    "./dist/*",
+    "./build/electron/*"
+  ],
+  "directories": {
+    "output": "release/"
+  }
+}
+  
