@@ -1,7 +1,7 @@
-import { app, shell } from 'electron';
+import { app, shell, Menu } from 'electron';
 
 const isMac = process.platform === 'darwin'
-const menu = [
+const template = [
   // { role: 'appMenu' }
   ...(isMac ? [{
     label: app.name,
@@ -96,5 +96,8 @@ const menu = [
     ]
   }
 ] as Electron.MenuItemConstructorOptions[];
+
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
 
 export default menu;

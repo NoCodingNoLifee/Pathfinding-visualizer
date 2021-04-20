@@ -1,0 +1,47 @@
+#menu-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 30px;
+  -webkit-app-region: drag;
+}
+
+.menu-items {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.menubar-btn {
+  -webkit-app-region: no-drag;
+}
+
+button {
+  height: 100%;
+  padding: 0 15px;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+button:hover {
+  background: rgba(221, 221, 221, 0.2);
+}
+
+#close-btn:hover {
+  background: rgb(255, 0, 0);
+}
+
+button i {
+  color: white;
+}
+
+.menubar-btn img {
+  background-color: transparent;
+}
+
+.logo {
+  max-width: 300px;
+  max-height: 50px;
+  cursor: pointer;
+}

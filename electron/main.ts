@@ -1,46 +1,58 @@
-import { app, BrowserWindow, Menu, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-import menuTemplate from './menu';
+import menu from './menu';
+
+const isWindows = process.platform === 'win32';
 
 let mainWindow: BrowserWindow | null;
 
 function createWindow() {
-  const displays = screen.getAllDisplays()
+  const displays = screen.getAllDisplays();
   const externalDisplay = displays.find((display) => {
-    return display.bounds.x !== 0 || display.bounds.y !== 0
+    return display.bounds.x !== 0 || display.bounds.y !== 0;
   });
 
-  let mainWindow;
+  let mainWindow: BrowserWindow,
+    x = 50,
+    y = 50;
   if (externalDisplay) {
-    mainWindow = new BrowserWindow({
-      width: 1280, height: 1024,
-      x: externalDisplay.bounds.x + 50,
-      y: externalDisplay.bounds.y + 50
-    });
-  } else {
-    mainWindow = new BrowserWindow({
-      width: 1280, height: 1024,
-      x: 50,
-      y: 50
-    });
+    x += externalDisplay.bounds.x;
+    y += externalDisplay.bounds.y;
   }
 
-  const menu = Menu.buildFromTemplate(menuTemplate);
-  Menu.setApplicationMenu(menu);
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 1024,
+    x: x,
+    y: y,
+    frame: isWindows ? false : true, //Remove frame to hide default menu,
+    webPreferences: {
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      backgroundThrottling: false,
+      enableRemoteModule: true,
+      contextIsolation: false,
+    },
+  });
+
+  //const menu = Menu.buildFromTemplate(menu);
+  //Menu.setApplicationMenu(menu);
 
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, '../../dist/index.html'),
-      protocol: 'file:',
-      slashes: true
-    })
+      url.format({
+        pathname: path.join(__dirname, '../../dist/index.html'),
+        protocol: 'file:',
+        slashes: true,
+      })
   );
 
+  mainWindow.webContents.openDevTools();
+
   mainWindow.on('closed', () => {
-    mainWindow = null
+    mainWindow = null;
   });
 }
 
@@ -48,12 +60,23 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 });
 
 app.on('activate', () => {
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
+  }
+});
+
+// Register an event listener. When ipcRenderer sends mouse click co-ordinates, show menu at that position.
+ipcMain.on(`display-app-menu`, function (e, args) {
+  if (isWindows && mainWindow) {
+    menu.popup({
+      window: mainWindow,
+      x: args.x,
+      y: args.y,
+    });
   }
 });
