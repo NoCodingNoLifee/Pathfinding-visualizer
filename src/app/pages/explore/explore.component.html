@@ -1,0 +1,13 @@
+<div class="explore">
+  <button (click)="run()">Run algorithm</button>
+  <table id="grid">
+    <tbody>
+      <tr *ngFor="let row of [].constructor(GraphService.Rows); let i = index;" id="row {{i}}">
+        <td *ngFor="let cols of [].constructor(GraphService.Cols); let j = index;" id="node-{{i}}-{{j}}"
+          [ngClass]="GraphService.GetNode({X: i, Y: j}).IsStart ? 'start' : GraphService.GetNode({X: i, Y: j}).IsGoal ? 'goal' : GraphService.GetNode({X: i, Y: j}).IsWall ? 'wall' : 'unvisited'"
+          (mousedown)="onMouseDownNode(i, j)" (mouseenter)="onMouseEnterNode(i, j)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
