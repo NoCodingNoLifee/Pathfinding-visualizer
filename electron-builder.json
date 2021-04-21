@@ -2,10 +2,15 @@
   "appId": "pathfinding-visualizer",
   "files": [
     "./dist/*",
-    "./build/electron/*"
+    "./build/electron/*",
+    "./dist/**/*",
+    "./dist/**/**/*"
   ],
   "directories": {
     "output": "release/"
+  },
+  "win": {
+    "icon": "./dist/favicon.ico"
   }
 }
   

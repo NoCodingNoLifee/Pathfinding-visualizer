@@ -74,7 +74,7 @@ export class ExploreComponent implements OnInit {
           document.getElementById(`node-${node.Position.X}-${node.Position.Y}`)
         );
         td.className = 'node visited';
-      }, 1);
+      }, 500 * i);
     }
   }
 

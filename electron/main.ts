@@ -28,6 +28,7 @@ function createWindow() {
     x: x,
     y: y,
     frame: isWindows ? false : true, //Remove frame to hide default menu,
+    icon: path.join(__dirname, '../../dist/favicon.ico'),
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
