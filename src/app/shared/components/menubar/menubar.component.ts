@@ -19,13 +19,9 @@ export class MenubarComponent implements OnInit {
 
       window.addEventListener('DOMContentLoaded', () => {
         //let menuButton = <HTMLElement>document.getElementById('menu-btn');
-        let minimizeButton = <HTMLElement>(
-          document.getElementById('minimize-btn')
-        );
-        let maxUnmaxButton = <HTMLElement>(
-          document.getElementById('max-unmax-btn')
-        );
-        let closeButton = <HTMLElement>document.getElementById('close-btn');
+        let minimizeButton = document.getElementById('minimize-btn');
+        let maxUnmaxButton = document.getElementById('max-unmax-btn');
+        let closeButton = document.getElementById('close-btn');
 
         // menuButton.addEventListener('click', (e) => {
         //   this._electronService.ipcRenderer.send('display-app-menu', e.x, e.y);

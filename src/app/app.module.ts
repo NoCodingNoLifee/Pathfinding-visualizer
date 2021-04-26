@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material.module';
 
 import { AppComponent } from './app.component';
 
@@ -16,6 +17,8 @@ import { AboutComponent } from './pages/about';
 import { ExploreComponent } from './pages/explore';
 import { GridComponent } from './components/grid/grid.component';
 
+import { VarDirective } from './ng-var.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +28,7 @@ import { GridComponent } from './components/grid/grid.component';
     MenubarComponent,
     ExploreComponent,
     GridComponent,
+    VarDirective,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +37,7 @@ import { GridComponent } from './components/grid/grid.component';
     FormsModule,
     ReactiveFormsModule,
     NgxElectronModule,
+    MaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

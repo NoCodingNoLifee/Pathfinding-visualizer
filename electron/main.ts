@@ -35,6 +35,7 @@ function createWindow() {
       backgroundThrottling: false,
       enableRemoteModule: true,
       contextIsolation: false,
+      devTools: false,
     },
   });
 
@@ -50,7 +51,7 @@ function createWindow() {
       })
   );
 
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

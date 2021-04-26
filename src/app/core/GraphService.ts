@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Node } from '../models/Node';
-import { Point } from '../models/Point';
+import { Node } from './models/Node';
+import { Point } from './models/Point';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GraphService {
   Graph: Array<Node> = new Array();
+  Grid: Array<Node[]> = new Array();
+
   Rows: number = 20;
   Cols: number = 50;
   constructor() {
@@ -14,6 +16,9 @@ export class GraphService {
   }
 
   public Initialize(rows: number, cols: number): void {
+    this.Rows = rows;
+    this.Cols = cols;
+
     this.Graph = new Array<Node>(rows * cols);
 
     for (let i = 0; i < rows * cols; i++) {
@@ -43,6 +48,21 @@ export class GraphService {
         counter++;
       }
     }
+
+    this.InitializeGrid();
+  }
+
+  private InitializeGrid(): void {
+    for (let i = 0; i < this.Rows; i++) {
+      this.Grid[i] = this.Graph.slice(i * this.Cols, i * this.Cols + this.Cols);
+    }
+  }
+
+  public Clear(removeWall: boolean = true): void {
+    this.Graph.forEach((node) => {
+      node.IsVisited = false;
+      if (removeWall) node.IsWall = false;
+    });
   }
 
   public GetNode(position: Point): Node {

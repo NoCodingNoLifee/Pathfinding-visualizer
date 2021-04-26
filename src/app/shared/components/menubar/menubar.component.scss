@@ -3,7 +3,14 @@
   justify-content: flex-end;
   align-items: center;
   height: 30px;
+}
+
+.menu-panel {
+  margin-top: 3px;
+  display: flex;
+  width: 100%;
   -webkit-app-region: drag;
+  height: 27px;
 }
 
 .menu-items {

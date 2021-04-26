@@ -1,4 +1,4 @@
-import { Node } from '../../models/Node';
+import { Node } from '../models/Node';
 
 export class NodeHelper {
   static GetPath(cameFrom: Array<Node>, from: Node, to: Node): Array<Node> {
@@ -10,8 +10,8 @@ export class NodeHelper {
       current = cameFrom[current.Id];
     }
 
-    path.unshift(from);
+    path.push(from);
 
-    return path;
+    return path.reverse();
   }
 }

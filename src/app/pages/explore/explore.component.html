@@ -1,10 +1,47 @@
 <div class="explore">
-  <button (click)="run()">Run algorithm</button>
+  <div class="toolbar" style="margin-bottom: 10px;">
+    <div class="item">
+      <mat-form-field appearance="fill">
+        <mat-label>Select search algorithm</mat-label>
+        <mat-select (selectionChange)="changeAlgoritm($event.value)">
+          <mat-option *ngFor="let alg of SearchAlgorithms" [value]="alg">
+            {{alg.Name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="item">
+      <mat-form-field appearance="fill">
+        <mat-label>Select maze generator</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let alg of MazeAlgorithms" [value]="alg" #matOption (click)="buildMaze(matOption.value)">
+            {{alg.Name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="item">
+      <button mat-raised-button color="accent" (click)="run()">Run algorithm</button>
+    </div>
+    <div class="item">
+      <button mat-raised-button color="basic" (click)="clearGrid(true)">Clear grid</button>
+    </div>
+    <div class="item">
+      <mat-form-field appearance="fill">
+        <mat-label>Select animation speed</mat-label>
+        <mat-select [(value)]="AnimationSpeed">
+          <mat-option [value]="1000">Slow</mat-option>
+          <mat-option [value]="200">Average</mat-option>
+          <mat-option [value]="50">Fast</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
   <table id="grid">
     <tbody>
-      <tr *ngFor="let row of [].constructor(GraphService.Rows); let i = index;" id="row {{i}}">
-        <td *ngFor="let cols of [].constructor(GraphService.Cols); let j = index;" id="node-{{i}}-{{j}}"
-          [ngClass]="GraphService.GetNode({X: i, Y: j}).IsStart ? 'start' : GraphService.GetNode({X: i, Y: j}).IsGoal ? 'goal' : GraphService.GetNode({X: i, Y: j}).IsWall ? 'wall' : 'unvisited'"
+      <tr *ngFor="let nodeArr of GraphService.Grid; let i = index;" id="row {{i}}">
+        <td *ngFor="let node of nodeArr; let j = index;" id="node-{{i}}-{{j}}"
+          [ngClass]="node.IsStart ? 'start' : node.IsGoal ? 'goal' : node.IsWall ? 'wall' : 'unvisited'"
           (mousedown)="onMouseDownNode(i, j)" (mouseenter)="onMouseEnterNode(i, j)">
         </td>
       </tr>

@@ -6,9 +6,17 @@
   min-height: 80%;
 }
 
+.mat-form-field {
+  font: 400 10px/12px Roboto, "Helvetica Neue", sans-serif !important;
+}
+
 #grid td {
   width: 25px;
   height: 25px;
+}
+
+.toolbar {
+  display: flex;
 }
 
 .unvisited {
@@ -26,6 +34,20 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+}
+
+.mat-raised-button {
+  line-height: 39px;
+}
+
+.toolbar {
+  flex-direction: row;
+  justify-content: center;
+  //flex-grow: 1;
+}
+
+.toolbar .item {
+  margin: 0 10px;
 }
 
 table {
@@ -51,8 +73,9 @@ table {
   // display: inline-block;
 }
 
-.shortest-path {
-  animation-name: shortestPath;
+.visited {
+  border: 1px solid rgb(175, 216, 248);
+  animation-name: visitedAnimation;
   animation-duration: 1.5s;
   animation-timing-function: ease-out;
   animation-delay: 0;
@@ -62,9 +85,8 @@ table {
   animation-play-state: running;
 }
 
-.visited {
-  border: 1px solid rgb(175, 216, 248);
-  animation-name: visitedAnimation;
+.shortest-path {
+  animation-name: shortestPath;
   animation-duration: 1.5s;
   animation-timing-function: ease-out;
   animation-delay: 0;
