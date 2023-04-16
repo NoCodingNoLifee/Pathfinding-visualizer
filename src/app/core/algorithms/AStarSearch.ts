@@ -5,7 +5,7 @@ import { NodeHelper } from '../helpers/NodeHelper';
 
 import { PriorityQueue } from '../PriorityQueue';
 
-export class ASearch implements ISearchAlgorithm {
+export class AStarSearch implements ISearchAlgorithm {
   private path: Array<Node>;
   private cost: Array<number>;
   private visitedNodes: Array<Node>;
@@ -70,8 +70,8 @@ export class ASearch implements ISearchAlgorithm {
 
   Heuristic(from: Node, to: Node): number {
     return (
-      Math.abs(from.Position.X - to.Position.X) +
-      Math.abs(from.Position.Y - to.Position.Y)
+      Math.abs(from.Position.Latitude - to.Position.Latitude) +
+      Math.abs(from.Position.Longitude - to.Position.Longitude)
     );
   }
 }

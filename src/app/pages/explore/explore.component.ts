@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GraphService } from '../../core/GraphService';
-import { Node } from '../../core/models/Node';
-import { SearchResult } from 'src/app/core/models/SearchResult';
+import { Node, SearchResult } from '../../core/models';
 
 import { ISearchAlgorithm } from '../../core/interfaces/ISearchAlgorithm';
-import { BreadthFirstSearch } from '../../core/algorithms/BreadthFirstSearch';
-import { DijkstrasSearch } from '../../core/algorithms/DijkstrasSearch';
-import { ASearch } from '../../core/algorithms/ASearch';
-import { DepthFirstSearch } from '../../core/algorithms/DepthFirstSearch';
-import { GreedyBestFirstSearch } from '../../core/algorithms/GreedyBestFirstSearch';
+
+import * as Alg from '../../core/algorithms';
 
 import { IMazeGenerator } from '../../core/interfaces/IMazeGenerator';
 import { RecursiveDivision } from '../../core/mazes/RecursiveDivision';
@@ -32,19 +28,21 @@ export class ExploreComponent implements OnInit {
   private rotateMainPos: string;
 
   constructor(private _graphService: GraphService) {
+    _graphService.Initialize(_graphService.Rows, _graphService.Cols);
     this.GraphService = _graphService;
-    this.StartNode = this.GraphService.GetNode({ X: 10, Y: 25 });
-    this.GoalNode = this.GraphService.GetNode({ X: 10, Y: 35 });
+    this.StartNode = this.GraphService.GetNode({ Latitude: 10, Longitude: 25 });
+    this.GoalNode = this.GraphService.GetNode({ Latitude: 10, Longitude: 35 });
 
     this.StartNode.IsStart = true;
     this.GoalNode.IsGoal = true;
 
     this.SearchAlgorithms = [
-      new DijkstrasSearch(_graphService.Graph),
-      new BreadthFirstSearch(_graphService.Graph),
-      new ASearch(_graphService.Graph),
-      new DepthFirstSearch(),
-      new GreedyBestFirstSearch(_graphService.Graph),
+      new Alg.DijkstrasSearch(_graphService.Graph),
+      new Alg.BreadthFirstSearch(_graphService.Graph),
+      new Alg.AStarSearch(_graphService.Graph),
+      new Alg.DepthFirstSearch(),
+      new Alg.GreedyBestFirstSearch(_graphService.Graph),
+      new Alg.BidireactionalSearch(_graphService.Graph),
     ];
 
     this.MazeAlgorithms = [
@@ -67,20 +65,30 @@ export class ExploreComponent implements OnInit {
     this.SelectedAlgorithm = algorithm;
   }
 
-  buildMaze(mazeGenerator: IMazeGenerator): void {
+  async buildMaze(mazeGenerator: IMazeGenerator): Promise<void> {
     this.clearGrid(true);
 
     let walls = mazeGenerator.Generate(this.StartNode, this.GoalNode);
-
     console.log(walls);
 
-    walls.forEach((node) => {
-      if (node != undefined) node.IsWall = true;
+    await this.animateWalls(walls);
+    // walls.forEach(async (node) => {
+    //   node.IsWall = true;
+    //   await this.delay(this.AnimationSpeed);
+    // });
+  }
+
+  async animateWalls(walls: Array<Node>): Promise<void> {
+    return new Promise(async () => {
+      for (let i = 0; i < walls.length; i++) {
+        walls[i].IsWall = true;
+        await this.delay(20);
+      }
     });
   }
 
   onMouseDownNode(row: number, col: number): void {
-    let node = this._graphService.GetNode({ X: row, Y: col });
+    let node = this._graphService.GetNode({ Latitude: row, Longitude: col });
 
     if (!node.IsStart && !node.IsGoal) node.IsWall = !node.IsWall;
     else this.rotateMainPos = node.IsStart ? 'start' : 'goal';
@@ -90,7 +98,7 @@ export class ExploreComponent implements OnInit {
 
   onMouseEnterNode(row: number, col: number): void {
     if (this.isMousePressed) {
-      let node = this._graphService.GetNode({ X: row, Y: col });
+      let node = this._graphService.GetNode({ Latitude: row, Longitude: col });
 
       if (this.rotateMainPos == 'start') {
         this.StartNode.IsStart = false;
@@ -147,7 +155,7 @@ export class ExploreComponent implements OnInit {
       for (let i = 0; i < path.length; i++) {
         let node = path[i];
         let td = document.getElementById(
-          `node-${node.Position.X}-${node.Position.Y}`
+          `node-${node.Position.Latitude}-${node.Position.Longitude}`
         ) as HTMLElement;
 
         td.className += ' ' + classNames;

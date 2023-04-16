@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Node } from './models/Node';
-import { Point } from './models/Point';
+import { Node, Point } from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +10,8 @@ export class GraphService {
 
   Rows: number = 20;
   Cols: number = 50;
-  constructor() {
-    this.Initialize(this.Rows, this.Cols);
-  }
+
+  constructor() {}
 
   public Initialize(rows: number, cols: number): void {
     this.Rows = rows;
@@ -30,7 +28,7 @@ export class GraphService {
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
         let from = this.Graph[counter];
-        from.Position = { X: i, Y: j };
+        from.Position = { Latitude: i, Longitude: j };
 
         let to: Node;
         if (j != cols - 1) {
@@ -67,9 +65,39 @@ export class GraphService {
 
   public GetNode(position: Point): Node {
     let node = this.Graph.filter(
-      (n) => n.Position.X == position.X && n.Position.Y == position.Y
+      (n) =>
+        n.Position.Latitude == position.Latitude &&
+        n.Position.Longitude == position.Longitude
     );
 
     return node[0];
+  }
+
+  public GetNodeById(id: number): Node {
+    let node = this.Graph.filter((n) => n.Id == id)[0];
+
+    return node;
+  }
+
+  public GetNearesNode(position: Point): Node {
+    let nearesNode: Node = this.Graph[0];
+
+    this.Graph.forEach((node) => {
+      if (
+        this.Heuristic(node.Position, position) <
+        this.Heuristic(nearesNode.Position, position)
+      ) {
+        nearesNode = node;
+      }
+    });
+
+    return nearesNode;
+  }
+
+  private Heuristic(from: Point, to: Point): number {
+    return (
+      Math.abs(from.Latitude - to.Latitude) +
+      Math.abs(from.Longitude - to.Longitude)
+    );
   }
 }

@@ -34,7 +34,8 @@ export class RecursiveDivision implements IMazeGenerator {
 
       nodes = this.graphService.Graph.filter(
         (node) =>
-          node.Position.X == randNum && horizontal.includes(node.Position.Y)
+          node.Position.Latitude == randNum &&
+          horizontal.includes(node.Position.Longitude)
       );
 
       this.GetRecursiveWalls(
@@ -55,7 +56,8 @@ export class RecursiveDivision implements IMazeGenerator {
 
       nodes = this.graphService.Graph.filter(
         (node) =>
-          node.Position.Y == randNum && vertical.includes(node.Position.X)
+          node.Position.Longitude == randNum &&
+          vertical.includes(node.Position.Latitude)
       );
 
       this.GetRecursiveWalls(

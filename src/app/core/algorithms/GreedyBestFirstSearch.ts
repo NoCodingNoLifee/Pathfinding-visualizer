@@ -64,8 +64,8 @@ export class GreedyBestFirstSearch implements ISearchAlgorithm {
 
   Heuristic(from: Node, to: Node): number {
     return (
-      Math.abs(from.Position.X - to.Position.X) +
-      Math.abs(from.Position.Y - to.Position.Y) +
+      Math.abs(from.Position.Latitude - to.Position.Latitude) +
+      Math.abs(from.Position.Longitude - to.Position.Longitude) +
       from.Weight
     );
   }
